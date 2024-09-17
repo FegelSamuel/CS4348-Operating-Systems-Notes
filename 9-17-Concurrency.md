@@ -17,7 +17,7 @@ The numbers are waiting times
 | E | 8 ms | 7 |
 Five Processes will be processed on a single CPU/core. All processes are at time point 0 in state `ready`. High priorities are characterized by high values. **Draw the execution order of the processes with a Gantt chart (timeline) for Round Robin (time slice/quantum is q = 1 ms), FCFS and priority-driven scheduling.** The Priority column in the table is only relevant for the priority scheduling and not for Round Robin or FCFS. **Calculate the average runtimes and average waiting times of the processes.**
 
-## Solution
+## Solution [INACCURATE]
 ### Round Robin
 <details>
   <summary>Spoiler warning</summary>
@@ -38,3 +38,48 @@ Five Processes will be processed on a single CPU/core. All processes are at time
   
 > A, D, E, B, C
 </details>
+
+# Sharing Resources
+* Concurrent processes generally need to share some nonzero amount of resources, which is often data.
+* Race conditions can happen
+## Process Synchronization
+* Opposite goal than IPC
+* Needed to guarantee correct and stable outcome
+* It looks simple, but is not!
+## Problems
+### Race Conditions
+* Correct outcome is only guaranteed in certain situations
+### Deadlocks
+* System state where no progress
+### Livelocks
+
+### Dining Philosopher Problem
+* Five philosophers dine together at the same table. Each philosopher has their own plate at the table. There is a fork between each plate. The dish served is a kind of spaghetti which has to be eaten with two forks. Each philosopher can only alternately think and eat. Moreover, a philosopher can only eat their spaghetti when they have both a left and right fork. Thus two forks will only be available when their two nearest neighbors are thinking, not eating. After an individual philosopher finishes eating, they will put down both forks. The problem is how to design a regimen (a concurrent algorithm) such that any philosopher will not starve; i.e., each can forever continue to alternate between eating and thinking, assuming that no philosopher can know when others may want to eat or think (an issue of incomplete information).
+* The problem was designed to illustrate the challenges of avoiding deadlock, a system state in which no progress is possible. To see that a proper solution to this problem is not obvious, consider a proposal in which each philosopher is instructed to behave as follows:
+
+* think unless the left fork is available; when it is, pick it up;
+* think unless the right fork is available; when it is, pick it up;
+* when both forks are held, eat for a fixed amount of time;
+* put the left fork down;
+* put the right fork down;
+* repeat from the beginning.
+* With these instructions, the situation may arise where each philosopher holds the fork to their left; in that situation, they will all be stuck forever, waiting for the other fork to be available: it is a deadlock.
+
+# Exercise
+```C
+int main() {
+  for (int i = 0; i < 3; i++) {
+    pid_t = fork();
+    if (p == 0) {
+      i++; // extra increment on i
+    }
+    printf("%d", i);
+    fflush(); // flush buffer, it just means "actually send this thing to console"
+  }
+}
+```
+What's a possible output? 
+lmao it's a trick question we have no fucking idea
+
+
+
