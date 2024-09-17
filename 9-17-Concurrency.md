@@ -48,11 +48,11 @@ Five Processes will be processed on a single CPU/core. All processes are at time
 * It looks simple, but is not!
 ## Problems
 ### Race Conditions
-* Correct outcome is only guaranteed in certain situations
+Correct outcome is only guaranteed in certain situations
 ### Deadlocks
-* System state where no progress
+A deadlock in an operating system occurs when a group of processes is stuck in a state where each process is waiting for a resource that another process in the group holds. As a result, none of the processes can proceed, causing the entire group to be blocked indefinitely.
 ### Livelocks
-
+A livelock in an operating system occurs when two or more processes or threads are constantly changing their state in response to each other, but none of them make progress toward completing their tasks. This situation is similar to a deadlock, but in a livelock, the processes or threads are actively "doing something," whereas in a deadlock, they are completely blocked.
 ### Dining Philosopher Problem
 * Five philosophers dine together at the same table. Each philosopher has their own plate at the table. There is a fork between each plate. The dish served is a kind of spaghetti which has to be eaten with two forks. Each philosopher can only alternately think and eat. Moreover, a philosopher can only eat their spaghetti when they have both a left and right fork. Thus two forks will only be available when their two nearest neighbors are thinking, not eating. After an individual philosopher finishes eating, they will put down both forks. The problem is how to design a regimen (a concurrent algorithm) such that any philosopher will not starve; i.e., each can forever continue to alternate between eating and thinking, assuming that no philosopher can know when others may want to eat or think (an issue of incomplete information).
 * The problem was designed to illustrate the challenges of avoiding deadlock, a system state in which no progress is possible. To see that a proper solution to this problem is not obvious, consider a proposal in which each philosopher is instructed to behave as follows:
@@ -78,8 +78,9 @@ int main() {
   }
 }
 ```
-What's a possible output? 
-lmao it's a trick question we have no fucking idea
+> What's a possible output?
+
+> lmao it's a trick question we have no fucking idea
 
 
 
