@@ -17,3 +17,24 @@ The numbers are waiting times
 | E | 8 ms | 7 |
 Five Processes will be processed on a single CPU/core. All processes are at time point 0 in state `ready`. High priorities are characterized by high values. **Draw the execution order of the processes with a Gantt chart (timeline) for Round Robin (time slice/quantum is q = 1 ms), FCFS and priority-driven scheduling.** The Priority column in the table is only relevant for the priority scheduling and not for Round Robin or FCFS. **Calculate the average runtimes and average waiting times of the processes.**
 
+## Solution
+### Round Robin
+<details>
+  <summary>Spoiler warning</summary>
+  Time slice is 1 ms, so we go around with the smallest runtime first
+  > 
+</details>
+
+### FCFS (First Come First Serve)
+<details>
+  <summary>Spoiler warning</summary>
+  
+  > A, B, C, D, E
+</details>
+
+### Priority-Driven Scheduling
+<details>
+  <summary>Spoiler warning</summary>
+  
+> A, D, E, B, C
+</details>
