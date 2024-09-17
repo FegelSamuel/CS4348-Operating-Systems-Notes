@@ -82,5 +82,38 @@ int main() {
 
 > lmao it's a trick question we have no fucking idea
 
+# Mutual Exclusion
+A `mutex` (mutual exclusion) in C++ is used to prevent multiple threads from accessing shared resources simultaneously, ensuring that only one thread can execute a critical section of code at a time. This helps prevent race conditions—where two or more threads access shared data concurrently, potentially leading to inconsistent or unpredictable results.
 
+## Key Concepts
+* _**Mutual Exclusion**_: Only one **thread** can own the **mutex** at any given time, meaning only that thread can execute the protected critical section of code.
+* _**Locking**_: A **thread** must **acquire** (or **lock**) the **mutex** before entering the critical section. Once it finishes its task, it releases (or unlocks) the **mutex** so that other **threads** can acquire it.
+  * A acquires a lock and B acquires a lock and they accidentally lock each other out (dining philosophers problem, nobody wants to put their singular fork down)
+* _**Blocking**_: If a **thread** tries to acquire a **mutex** that is already locked by another **thread**, it will be **blocked** until the **mutex** is released.
+
+```C
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;  // Declare a mutex
+
+void printNumbers(int id) {
+    mtx.lock();  // Lock the mutex before entering critical section
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Thread " << id << " is printing " << i << std::endl;
+    }
+    mtx.unlock();  // Unlock the mutex after leaving the critical section
+}
+
+int main() {
+    std::thread t1(printNumbers, 1);
+    std::thread t2(printNumbers, 2);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+```
 
