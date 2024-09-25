@@ -193,6 +193,7 @@ Ultimately, semaphores offer more flexibility but come with increased complexity
 # Telugu
 
 ```txt
-Ee roju_ ela undhi
+Ee roju_ ela undhi?
+How's today?
 ```
 
