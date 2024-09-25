@@ -190,3 +190,9 @@ When comparing semaphores and mutexes, both have distinct advantages and disadva
 
 Ultimately, semaphores offer more flexibility but come with increased complexity, while mutexes are simpler and better suited for exclusive access to a single resource. The choice depends on the specific requirements of your application, including the number of resources being managed and the level of synchronization needed.
 
+# Telugu
+
+```txt
+Ee roju_ ela undhi
+```
+
