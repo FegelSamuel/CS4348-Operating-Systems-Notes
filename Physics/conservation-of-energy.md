@@ -33,22 +33,27 @@ The **conservation of energy method** states that the total mechanical energy (*
    $\[
    PE_{\text{initial}} + KE_{\text{initial}} = PE_{\text{final}} + KE_{\text{final}}
    $\]
+   
    Substituting the values:
    $\[
    Mgh + 0 = 0 + \frac{1}{2} Mv^2
    $\]
+   
    Simplifying:
    $\[
    Mgh = \frac{1}{2} Mv^2
    $\]
+   
    Cancel out **M** from both sides (since **M** != 0):
    $\[
    gh = \frac{1}{2} v^2
    $\]
+   
    Multiply both sides by 2:
    $\[
    2gh = v^2
    $\]
+   
    Taking the square root of both sides:
    $\[
    v = \sqrt{2gh}
