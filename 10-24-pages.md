@@ -127,6 +127,101 @@ Here’s how COW functions step by step:
 ### 9. **Copy-on-Write in File Systems**
 In file systems like **ZFS** or **Btrfs**, COW is used to ensure data integrity. When modifying a file, instead of overwriting the original data, a new copy is written, and the pointers are updated. This ensures that the old data is preserved until the write is complete, which helps prevent data corruption in the event of a crash.
 
+# Victim Page
+A **victim page** is a term used in the context of paging and virtual memory management in operating systems. It refers to a memory page that is selected to be **evicted** (removed) from physical memory (RAM) to make room for a new page when there is no available free space in RAM. This process happens as part of a **page replacement** strategy.
+
+### When is a Victim Page Chosen?
+When a new page needs to be loaded into RAM but there is no free space available, the OS must remove (swap out) an existing page. The page that gets removed is called the **victim page**. The decision of which page to evict is made by the page replacement algorithm that the operating system is using.
+
+### How the Victim Page is Handled
+1. **Page Replacement Algorithms**: The OS uses various algorithms to decide which page should be the victim. Common algorithms include:
+   - **Least Recently Used (LRU)**: The page that hasn’t been used for the longest time is chosen as the victim.
+   - **First In, First Out (FIFO)**: The oldest page (the one that has been in memory the longest) is evicted.
+   - **Optimal Page Replacement**: The page that won’t be needed for the longest time in the future is chosen (though this is theoretical and **not feasible in practice** because you can't predict how things are called).
+   - **Clock Algorithm (Second Chance)**: Pages are given a second chance before being evicted, based on whether they’ve been recently accessed.
+
+2. **Writing the Victim Page to Disk (Swap)**: If the victim page has been modified since it was loaded into memory (i.e., it is a **dirty page**), it must first be written back to the disk (into the **swap space**) before it can be evicted. If it hasn’t been modified (i.e., it’s a **clean page**), it can simply be removed without needing to save it back to disk, as it can be reloaded from its original location when needed.
+
+3. **Loading the New Page**: Once the victim page is evicted, the new page is loaded into the freed-up space in RAM. The page table is updated to reflect the new mapping of virtual addresses to physical memory.
+
+### Importance of Selecting the Right Victim Page
+Selecting the right victim page is critical for maintaining system performance. If a frequently used page is chosen as the victim, the system might need to load it back into memory soon after, causing unnecessary page faults and slowing down performance. On the other hand, evicting an infrequently used page minimizes the risk of performance degradation.
+
+### Example Scenario
+Consider a system with limited RAM running multiple processes. As these processes access new pages, eventually the RAM becomes full. When a process tries to access a page that is not in memory (resulting in a **page fault**), the OS must choose a **victim page** to evict. Using a page replacement algorithm like LRU, the OS selects the page that hasn’t been used for the longest time, evicts it, and loads the new page.
+## Optimum Algorithm
+![Optimum Algorithm](https://github.com/user-attachments/assets/185f9794-95e7-4d7c-99a7-c8b59ebfc1ac)
+## Random Algorithm
+* Given a random string that determines the page index to be swapped out
+![Random String Determines Index](https://github.com/user-attachments/assets/aca51a01-48a4-43a6-8e8b-74b6130bcfc0)
+## FIFO Algorithm
+* dies to Belady's Anomaly
+
+# Belady's Anomaly
+
+### Summary
+- A **victim page** is the page selected to be removed from memory when there is no free space available to load a new page.
+- It is chosen based on a **page replacement algorithm**.
+- If the page is modified, it is saved to disk before eviction.
+- Efficient selection of victim pages is crucial for maintaining system performance and minimizing page faults.
+
+**Belady's anomaly** is a counterintuitive phenomenon in the context of page replacement algorithms in operating systems, where **increasing the number of page frames** (available physical memory) leads to **more page faults**, rather than fewer. This goes against the general expectation that more memory should reduce page faults since there’s more space to hold pages.
+
+Belady's anomaly specifically occurs in some **page replacement algorithms**, particularly the **First-In, First-Out (FIFO)** algorithm. However, it doesn't occur in every page replacement algorithm. Algorithms like **Least Recently Used (LRU)** and **Optimal Page Replacement** do not exhibit this anomaly.
+
+### How Does Belady's Anomaly Happen?
+
+1. **Normal Expectation**: When the number of page frames (physical memory) increases, it is expected that the number of page faults would decrease or stay the same, because there is more space to store pages in memory, reducing the need to evict pages.
+
+2. **Belady's Anomaly**: With certain algorithms like FIFO, however, increasing the number of page frames can result in **more page faults**. This is because the FIFO algorithm removes the oldest page regardless of how frequently it's used or whether it will be needed soon, and increasing the number of frames doesn't always optimize the choice of which page to keep in memory.
+
+### Example of Belady’s Anomaly
+
+Let’s walk through an example using the **FIFO page replacement algorithm**. Assume we have the following reference string (the sequence of page requests) and varying numbers of page frames.
+
+#### Reference String:
+```
+1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5
+```
+
+#### Case 1: 3 Page Frames
+
+- **Initially** (empty memory): Pages 1, 2, 3 are loaded into the 3 frames, causing 3 page faults.
+- **Next**, page 4 is requested, and since memory is full, page 1 (the oldest) is replaced, causing a page fault.
+- **Next**, page 1 is requested again, and page 2 (the oldest) is replaced, causing another page fault.
+- **Next**, page 2 is requested, and page 3 (the oldest) is replaced, causing a page fault.
+- Continue until the entire string is processed.
+
+Total **page faults** with 3 frames: **9**
+
+#### Case 2: 4 Page Frames
+
+- **Initially** (empty memory): Pages 1, 2, 3, 4 are loaded into the 4 frames, causing 4 page faults.
+- **Next**, page 1 is requested again, and no page fault occurs because it's still in memory.
+- **Next**, page 2 is requested again, no page fault occurs.
+- **Next**, page 5 is requested, and since memory is full, page 1 (the oldest) is replaced, causing a page fault.
+- Continue until the entire string is processed.
+
+Total **page faults** with 4 frames: **10**
+
+In this case, when moving from 3 to 4 page frames, the total number of page faults **increases from 9 to 10**, illustrating **Belady’s anomaly**.
+
+### Why Does Belady’s Anomaly Occur?
+- **FIFO Behavior**: FIFO blindly evicts the oldest page, without considering whether that page is still needed soon. Adding more page frames doesn’t necessarily help, because the algorithm continues to evict pages based only on age, not future use or frequency.
+  
+- **Suboptimal Memory Utilization**: Increasing the number of frames can cause a less optimal set of pages to be kept in memory. In certain cases, more frames can lead to more evictions of frequently needed pages.
+
+### Algorithms That Avoid Belady’s Anomaly
+
+Belady’s anomaly is primarily associated with the FIFO algorithm and a few others like **Random Replacement**. However, more advanced algorithms that make better decisions about which pages to evict, such as:
+
+- **Least Recently Used (LRU)**: Evicts the page that hasn’t been used for the longest time, which tends to keep frequently used pages in memory longer.
+- **Optimal Page Replacement**: Evicts the page that won’t be used for the longest time in the future (theoretical, as it requires knowledge of future page requests).
+
+These algorithms do **not** suffer from Belady’s anomaly. In these algorithms, increasing the number of page frames typically reduces page faults or, at worst, keeps them the same.
+
 ### Conclusion
-Copy-on-Write is an essential optimization that allows modern operating systems to efficiently manage memory by delaying the duplication of data until it is absolutely necessary. This mechanism saves memory, improves performance during process creation, and allows multiple processes to safely share memory until modifications are made.
+- **Belady’s anomaly** is the phenomenon where increasing the number of page frames can **increase** the number of page faults in some algorithms, particularly FIFO.
+- It is an anomaly because intuitively, adding more memory should reduce page faults.
+- Belady's anomaly highlights the importance of using effective page replacement algorithms like LRU or Optimal, which make more informed decisions on which pages to evict.
 
