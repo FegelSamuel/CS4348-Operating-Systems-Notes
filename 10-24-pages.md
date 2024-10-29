@@ -43,7 +43,10 @@ When the OS needs to bring a new page into memory but RAM is full, it must decid
 
 - **LRU (Least Recently Used):** Replaces the page that hasn’t been used for the longest time.
 - **FIFO (First In First Out):** Replaces the oldest page in memory.
-- **Clock (Second Chance):** Pages are given a second chance to stay in memory before being replaced.
+- **Clock (Second Chance):** Pages are given a second chance to stay in memory before being replaced. 
+
+#### Second Chance
+A variant of FIFO. Maintains a FIFO queue. Examine the first page in the queue. If its reference bit is not set, then select the page for replacement and stop. If its reference bit is set, then clear the reference bit and move to page to the back of the queue. A more efficient implementation imitates a clock.
 
 ### 10. **Protection and Sharing**
 - Pages can be marked with protection bits (e.g., read-only, read-write) to prevent unauthorized access.
@@ -220,8 +223,11 @@ Belady’s anomaly is primarily associated with the FIFO algorithm and a few oth
 
 These algorithms do **not** suffer from Belady’s anomaly. In these algorithms, increasing the number of page frames typically reduces page faults or, at worst, keeps them the same.
 
+
 ### Conclusion
 - **Belady’s anomaly** is the phenomenon where increasing the number of page frames can **increase** the number of page faults in some algorithms, particularly FIFO.
 - It is an anomaly because intuitively, adding more memory should reduce page faults.
 - Belady's anomaly highlights the importance of using effective page replacement algorithms like LRU or Optimal, which make more informed decisions on which pages to evict.
+
+
 
