@@ -105,4 +105,17 @@ Each RAID level has its trade-offs, and the choice depends on your specific need
 * Other attributes in the table can be used to perform additional checks such as:
   * Is the segment number valid?
   * Is the instruction compatible with the access permissions of the segment?
-  
+# Peterson's Algorithm
+```C
+bool flag[2] = { false, false };
+int turn;
+flag[myid] = true; // announce intention to other process
+turn = 1 - myid; // yield to other process
+while (flag[1-myd] and turn != myid) do // wait if the other process also wants the lock AND it's not your turn
+  begin
+    ;
+end while
+```
+# Atomic
+* "This block of code can never be context switched until it's complete."
+* Essentially this blows out all of the problems we have for multiprocessing
