@@ -92,3 +92,17 @@ Fault tolerance, improved system performance because of concurrency (you can rea
 ---
 
 Each RAID level has its trade-offs, and the choice depends on your specific needs for performance, redundancy, and storage efficiency.
+
+# Segmenting
+* A logical address is a tuple in which:
+  * Higher order bits denote the segment number (s) and
+  * lower order bits denote teh offset (d) within the segment
+  * Split logical address into s and d
+  * Use s as an index into the segment table and retrieve the base address (b) and length (l) of the segment
+  * Compare d with l
+    * If d !< l then generate a trap
+    * If d < l then add d to b to generate the physical address
+* Other attributes in the table can be used to perform additional checks such as:
+  * Is the segment number valid?
+  * Is the instruction compatible with the access permissions of the segment?
+  
